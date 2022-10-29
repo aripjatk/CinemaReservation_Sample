@@ -1,9 +1,10 @@
-package pl.edu.pjwstk.s22796.xyz.cinemareservation.models;
+package pl.edu.pjwstk.s22796.xyz.cinemareservation.entities;
 
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.SeatingAvailability;
 
 import java.time.LocalDateTime;
 

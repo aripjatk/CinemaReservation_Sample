@@ -1,4 +1,6 @@
-package pl.edu.pjwstk.s22796.xyz.cinemareservation.models;
+package pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata;
+
+import pl.edu.pjwstk.s22796.xyz.cinemareservation.entities.Movie;
 
 import java.time.LocalDateTime;
 

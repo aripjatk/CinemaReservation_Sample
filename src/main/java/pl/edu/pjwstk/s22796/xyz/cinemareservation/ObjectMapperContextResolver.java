@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.ext.ContextResolver;
 import jakarta.ws.rs.ext.Provider;
-import pl.edu.pjwstk.s22796.xyz.cinemareservation.models.SeatingAvailability;
+import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.SeatingAvailability;
 
 import java.io.IOException;
 

@@ -1,9 +1,8 @@
-package pl.edu.pjwstk.s22796.xyz.cinemareservation.models;
+package pl.edu.pjwstk.s22796.xyz.cinemareservation.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Max;
 
 @Entity
 public class Room {

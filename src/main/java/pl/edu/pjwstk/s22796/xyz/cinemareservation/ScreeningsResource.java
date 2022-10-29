@@ -8,9 +8,9 @@ import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Selection;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import pl.edu.pjwstk.s22796.xyz.cinemareservation.models.Movie;
-import pl.edu.pjwstk.s22796.xyz.cinemareservation.models.Screening;
-import pl.edu.pjwstk.s22796.xyz.cinemareservation.models.ScreeningInformation;
+import pl.edu.pjwstk.s22796.xyz.cinemareservation.entities.Movie;
+import pl.edu.pjwstk.s22796.xyz.cinemareservation.entities.Screening;
+import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.ScreeningInformation;
 
 import java.time.LocalDateTime;
 import java.util.List;

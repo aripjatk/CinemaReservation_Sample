@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.s22796.xyz.cinemareservation.models;
+package pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata;
 
 /**
  * Stores information about availability of seats in a screening, which is calculated

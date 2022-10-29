@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.s22796.xyz.cinemareservation.models;
+package pl.edu.pjwstk.s22796.xyz.cinemareservation.entities;
 
 import jakarta.persistence.*;
 
