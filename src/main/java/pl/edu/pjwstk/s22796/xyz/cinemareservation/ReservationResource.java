@@ -21,6 +21,9 @@ import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.ReservationRequest
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Contains API methods to manage reservations.
+ */
 @Path("/reservation")
 public class ReservationResource {
 
@@ -60,6 +63,8 @@ public class ReservationResource {
         query.where(cb.equal(screeningRoot.get("IDScreening"), screeningID));
         Screening scr = emgr.createQuery(query).getSingleResult();
 
+        // Initialise reservation object with info from POST request
+        // then save it, so it can be used as foreign key for ReservedSeats
         Reservation reservation = new Reservation();
         reservation.setName(req.getName());
         reservation.setSurname(req.getSurname());
@@ -68,6 +73,8 @@ public class ReservationResource {
 
         double totalPrice = 0D;
         // Reserve each seat, converting ReservationRequest.Seat to ReservedSeat
+        // Duplicate reservations are prevented by the composite primary key constraint
+        // (see entities.ReservedSeatPrimaryKey)
         for(ReservationRequest.Seat seat : req.getSeats()) {
             ReservedSeat seat1 = new ReservedSeat();
             seat1.setReservation(reservation);

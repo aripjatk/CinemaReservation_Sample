@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 
 import java.time.Instant;
 
+/**
+ * Represents a submitted and confirmed reservation of
+ * one or more seats for a particular cinema visit.
+ */
+@SuppressWarnings("unused")
 @Entity
 public class Reservation {
     @Id
@@ -25,6 +30,10 @@ public class Reservation {
         this.idReservation = idReservation;
     }
 
+    /**
+     * Returns the time at which this reservation is set to expire.
+     * @return expiration time in UTC
+     */
     public Instant getExpiration() {
         return expiration;
     }
@@ -33,6 +42,10 @@ public class Reservation {
         this.expiration = expiration;
     }
 
+    /**
+     * Returns the (first) name of the person who made the reservation.
+     * @return first name
+     */
     public String getName() {
         return name;
     }
@@ -41,6 +54,10 @@ public class Reservation {
         this.name = name;
     }
 
+    /**
+     * Returns the surname (last name) of the person who made the reservation.
+     * @return last name
+     */
     public String getSurname() {
         return surname;
     }

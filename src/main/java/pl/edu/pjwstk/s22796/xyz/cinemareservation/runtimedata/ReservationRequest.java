@@ -63,6 +63,11 @@ public class ReservationRequest {
     private String surname;
     private List<Seat> seats;
 
+    /**
+     * Returns the string which the user claims to be their (first) name,
+     * pending validation.
+     * @return (first) name
+     */
     public String getName() {
         return name;
     }
@@ -71,6 +76,11 @@ public class ReservationRequest {
         this.name = name;
     }
 
+    /**
+     * Returns the string which the user claims to be their surname
+     * (last name), pending validation.
+     * @return surname/last name
+     */
     public String getSurname() {
         return surname;
     }
@@ -79,6 +89,11 @@ public class ReservationRequest {
         this.surname = surname;
     }
 
+    /**
+     * Returns a list of all the seats which the user wishes to reserve
+     * for their visit.
+     * @return list of ReservationRequest.Seat objects
+     */
     public List<Seat> getSeats() {
         return seats;
     }

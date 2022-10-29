@@ -3,6 +3,10 @@ package pl.edu.pjwstk.s22796.xyz.cinemareservation.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+/**
+ * Used to provide a composite primary key to the ReservedSeat entity
+ * to ensure each seat per screening is only reserved once.
+ */
 @SuppressWarnings("unused")
 @Embeddable
 public class ReservedSeatPrimaryKey implements java.io.Serializable {

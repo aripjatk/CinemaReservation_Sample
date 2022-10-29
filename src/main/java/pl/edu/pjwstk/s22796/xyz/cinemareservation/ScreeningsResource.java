@@ -15,6 +15,9 @@ import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.ScreeningInformati
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Contains API methods to view screenings.
+ */
 @Path("/screenings")
 public class ScreeningsResource {
 
@@ -38,11 +41,11 @@ public class ScreeningsResource {
         CriteriaQuery<ScreeningInformation> query = cb.createQuery(ScreeningInformation.class);
         Root<Screening> screeningRoot = query.from(Screening.class);
 
-        // Parse start and end time
         LocalDateTime start = LocalDateTime.of(year, month, day, startHour, startMinute);
         LocalDateTime end = LocalDateTime.of(year, month, day, endHour, endMinute);
 
-        // SELECT movie, dateAndTime, IDScreening FROM Screening WHERE dateAndTime BETWEEN (start) AND (end)
+        // SELECT movie, dateAndTime, IDScreening FROM Screening
+        // WHERE dateAndTime BETWEEN (start) AND (end)
         query.where(cb.between(screeningRoot.get("dateAndTime"), start, end));
         Selection<Movie> movieSelection = screeningRoot.get("movie");
         Selection<LocalDateTime> dateTimeSelection = screeningRoot.get("dateAndTime");
@@ -63,8 +66,7 @@ public class ScreeningsResource {
         // SELECT * FROM Screening WHERE IDScreening = (idScreening)
         query.where(cb.equal(screeningRoot.get("IDScreening"), idScreening));
 
-        Screening scr = emgr.createQuery(query.select(screeningRoot))
-                .getResultList().stream().findFirst().orElseThrow();
+        Screening scr = emgr.createQuery(query.select(screeningRoot)).getSingleResult();
         scr.calculateSeatingAvailability();
         return scr;
     }

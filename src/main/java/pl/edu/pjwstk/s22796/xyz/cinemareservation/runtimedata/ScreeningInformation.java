@@ -5,8 +5,9 @@ import pl.edu.pjwstk.s22796.xyz.cinemareservation.entities.Movie;
 import java.time.LocalDateTime;
 
 /**
- * Class representing shortened version of information about a screening
- * (no seat availability or room number) returned by GET /screenings/list.
+ * Stores a shortened version of information about a screening
+ * (no seat availability or room number) to be returned by
+ * GET /screenings/list.
  */
 @SuppressWarnings("unused")
 public class ScreeningInformation {

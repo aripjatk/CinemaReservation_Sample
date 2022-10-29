@@ -24,6 +24,7 @@ public class SeatingAvailability {
                 availability[i][j] = defaultValue;
     }
 
+    @SuppressWarnings("unused")
     public void markAvailable(int row, int seat) {
         availability[row-1][seat-1] = true;
     }
@@ -55,35 +56,37 @@ public class SeatingAvailability {
             int consecutiveFreeSeats = 0;
             int firstFreeSeat = 0;
             for(int j=0;j<seatsPerRow;j++) {
-                if(availability[i][j]) {
+                if(availability[i][j]) { // this seat is available
                     if(consecutiveFreeSeats == 0)
                         firstFreeSeat = j;
                     consecutiveFreeSeats++;
-                } else { // next seat unavailable
-                    if(consecutiveFreeSeats == 0)
+                } else { // this seat is unavailable...
+                    if(consecutiveFreeSeats == 0) // ... and the one before it wasn't either
                         continue;
-                    if(consecutiveFreeSeats == 1) // previous seat was available, this one is not
+                    if(consecutiveFreeSeats == 1) // ... but the one before it was
                         builder.append(seat(j));
-                    else // more than one previous seat was available
+                    else // ... but more than one before it was
                         builder.append(seat(firstFreeSeat+1))
                                 .append('-').append(seat(j+2));
                     builder.append(",").append(i+1);
                     consecutiveFreeSeats = 0;
                 }
+                // if the builder ends with the current row number, remove it
                 if(Character.getNumericValue(builder.charAt(builder.length()-1)) == i)
-                // if the builder ends with the current row number
                     builder.deleteCharAt(builder.length()-1);
             }
 
-            if(consecutiveFreeSeats == 1)
+            if(consecutiveFreeSeats == 1) // if the last seat in a row is available
                 builder.append(seat(seatsPerRow));
-            else if(consecutiveFreeSeats > 1)
+            else if(consecutiveFreeSeats > 1) // if the last several seats in a row are available
                 builder.append(seat(firstFreeSeat+1)).append('-').append(seat(seatsPerRow));
 
+            // if the builder ends with the current row number, remove it
             if(Character.getNumericValue(builder.charAt(builder.length()-1)) == i+1)
                 builder.deleteCharAt(builder.length()-1);
             builder.append(",");
         }
+        // remove trailing comma
         if(builder.charAt(builder.length()-1) == ',')
             builder.deleteCharAt(builder.length()-1);
         return builder.toString();

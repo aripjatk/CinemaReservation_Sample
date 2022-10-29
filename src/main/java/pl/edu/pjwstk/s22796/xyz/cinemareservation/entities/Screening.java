@@ -8,7 +8,12 @@ import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.SeatingAvailabilit
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a particular screening/showing of a movie held on a given
+ * date and time in a given room.
+ */
 @Entity
+@SuppressWarnings("unused")
 public class Screening {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -26,6 +31,12 @@ public class Screening {
     @Transient
     private SeatingAvailability availability;
 
+    /**
+     * Returns an instance of a class which shows which seats have already been
+     * reserved for this screening. This may be null unless calculateSeatingAvailability
+     * has been called.
+     * @return instance of SeatingAvailability or null
+     */
     public SeatingAvailability getSeatingAvailability() {
         return availability;
     }

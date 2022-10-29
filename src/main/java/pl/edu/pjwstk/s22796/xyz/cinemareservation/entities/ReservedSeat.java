@@ -2,6 +2,9 @@ package pl.edu.pjwstk.s22796.xyz.cinemareservation.entities;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents the reservation of a single seat in one screening.
+ */
 @Entity
 @SuppressWarnings("unused")
 public class ReservedSeat {

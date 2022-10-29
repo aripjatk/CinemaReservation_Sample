@@ -2,6 +2,10 @@ package pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata;
 
 import java.time.Instant;
 
+/**
+ * Represents a confirmation of a reservation request made by the user.
+ * To be transmitted via REST.
+ */
 @SuppressWarnings("unused")
 public class ReservationInvoice {
     private double amountToPay;
