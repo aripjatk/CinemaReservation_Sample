@@ -3,6 +3,7 @@ package pl.edu.pjwstk.s22796.xyz.cinemareservation.entities;
 import jakarta.persistence.*;
 
 @Entity
+@SuppressWarnings("unused")
 public class ReservedSeat {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -26,8 +27,16 @@ public class ReservedSeat {
         return rowNumber;
     }
 
+    public void setRowNumber(int rowNumber) {
+        this.rowNumber = rowNumber;
+    }
+
     public int getSeatNumber() {
         return seatNumber;
+    }
+
+    public void setSeatNumber(int seatNumber) {
+        this.seatNumber = seatNumber;
     }
 
     public int getIdReservedSeat() {
