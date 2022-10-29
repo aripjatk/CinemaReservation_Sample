@@ -21,6 +21,15 @@ public class ReservedSeat {
     private Reservation reservation;
     @Column(nullable = false)
     private TicketType ticketType;
+
+    public int getRowNumber() {
+        return rowNumber;
+    }
+
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
     public int getIdReservedSeat() {
         return idReservedSeat;
     }

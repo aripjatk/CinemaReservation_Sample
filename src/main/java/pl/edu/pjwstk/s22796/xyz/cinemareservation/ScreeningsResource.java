@@ -1,7 +1,6 @@
 package pl.edu.pjwstk.s22796.xyz.cinemareservation;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -21,10 +20,11 @@ import java.util.List;
 @Path("/screenings")
 public class ScreeningsResource {
 
-    private final EntityManagerFactory emf;
+    private final EntityManager emgr;
 
     public ScreeningsResource() {
-        emf = Persistence.createEntityManagerFactory("default");
+        emgr = Persistence.createEntityManagerFactory("default")
+                .createEntityManager();
     }
 
     @GET
@@ -32,8 +32,7 @@ public class ScreeningsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Screening> getScreeningsInInterval(@PathParam("start") long startLong,
                                                    @PathParam("end") long endLong) {
-        // Create SQL query criteria
-        EntityManager emgr = emf.createEntityManager();
+        // Create database query
         CriteriaBuilder cb = emgr.getCriteriaBuilder();
         CriteriaQuery<Screening> query = cb.createQuery(Screening.class);
         Root<Screening> screeningRoot = query.from(Screening.class);
@@ -46,5 +45,22 @@ public class ScreeningsResource {
 
         query.where(cb.between(screeningRoot.get("dateAndTime"), start, end));
         return emgr.createQuery(query.select(screeningRoot)).getResultList();
+    }
+
+    @GET
+    @Path("/details/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Screening getScreeningDetails(@PathParam("id") int idScreening) {
+        // Create criteria for database query
+        CriteriaBuilder cb = emgr.getCriteriaBuilder();
+        CriteriaQuery<Screening> query = cb.createQuery(Screening.class);
+        Root<Screening> screeningRoot = query.from(Screening.class);
+        // SELECT * FROM Screening WHERE IDScreening = (idScreening)
+        query.where(cb.equal(screeningRoot.get("IDScreening"), idScreening));
+
+        Screening scr = emgr.createQuery(query.select(screeningRoot))
+                .getResultList().stream().findFirst().orElseThrow();
+        scr.calculateSeatingAvailability();
+        return scr;
     }
 }
