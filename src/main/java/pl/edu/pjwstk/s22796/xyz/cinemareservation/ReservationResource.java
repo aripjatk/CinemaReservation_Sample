@@ -53,10 +53,12 @@ public class ReservationResource {
         if(screeningID == 0)
             throw new IllegalArgumentException("No screening specified");
 
-        // Prepare query for looking up screenings for reservation request
+        // Prepare query for looking up screening for reservation request
         CriteriaBuilder cb = emgr.getCriteriaBuilder();
         CriteriaQuery<Screening> query = cb.createQuery(Screening.class);
         Root<Screening> screeningRoot = query.from(Screening.class);
+        query.where(cb.equal(screeningRoot.get("IDScreening"), screeningID));
+        Screening scr = emgr.createQuery(query).getSingleResult();
 
         Reservation reservation = new Reservation();
         reservation.setName(req.getName());
@@ -67,11 +69,10 @@ public class ReservationResource {
         double totalPrice = 0D;
         // Reserve each seat, converting ReservationRequest.Seat to ReservedSeat
         for(ReservationRequest.Seat seat : req.getSeats()) {
-            query.where(cb.equal(screeningRoot.get("IDScreening"), seat.getScreeningID()));
-            Screening scr = emgr.createQuery(query).getSingleResult();
             ReservedSeat seat1 = new ReservedSeat();
             seat1.setReservation(reservation);
             seat1.setScreening(scr);
+            seat1.setIDScreening(scr.getID());
             seat1.setSeatNumber(seat.getSeatNumber());
             seat1.setRowNumber(seat.getRowNumber());
             seat1.setTicketType(seat.getTicketType());
@@ -79,7 +80,6 @@ public class ReservationResource {
             totalPrice += seat.getTicketType().getPrice();
         }
 
-        emgr.persist(reservation);
         trans.commit();
         return new ReservationInvoice(totalPrice, reservation.getExpiration());
     }
