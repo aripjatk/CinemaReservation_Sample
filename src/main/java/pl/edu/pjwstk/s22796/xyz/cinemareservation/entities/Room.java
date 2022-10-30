@@ -18,6 +18,14 @@ public class Room {
     @Column(nullable = false)
     private int seatsPerRow;
 
+    public Room() {}
+
+    public Room(char[] roomNumber, int numRows, int seatsPerRow) {
+        this.roomNumber = roomNumber;
+        this.numRows = numRows;
+        this.seatsPerRow = seatsPerRow;
+    }
+
     /**
      * Returns the number of this room in the cinema.
      * This may be a Roman numeral or a number and letter such as "2A".

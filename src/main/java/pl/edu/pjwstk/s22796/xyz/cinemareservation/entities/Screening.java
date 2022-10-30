@@ -31,6 +31,14 @@ public class Screening {
     @Transient
     private SeatingAvailability availability;
 
+    public Screening() {}
+
+    public Screening(Movie movie, Room room, LocalDateTime when) {
+        this.movie = movie;
+        this.room = room;
+        dateAndTime = when;
+    }
+
     /**
      * Returns an instance of a class which shows which seats have already been
      * reserved for this screening. This may be null unless calculateSeatingAvailability

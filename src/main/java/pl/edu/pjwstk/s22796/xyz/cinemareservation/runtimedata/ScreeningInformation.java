@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * GET /screenings/list.
  */
 @SuppressWarnings("unused")
-public class ScreeningInformation {
+public class ScreeningInformation implements Comparable<ScreeningInformation> {
     private Movie movie;
     private LocalDateTime dateAndTime;
     private Integer id;
@@ -43,5 +43,14 @@ public class ScreeningInformation {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public int compareTo(ScreeningInformation o) {
+        int movieComparison = getMovie().getTitle().compareTo(o.getMovie().getTitle());
+        if(movieComparison == 0)
+            return getDateAndTime().compareTo(o.getDateAndTime());
+        else
+            return movieComparison;
     }
 }

@@ -13,6 +13,8 @@ import pl.edu.pjwstk.s22796.xyz.cinemareservation.entities.Screening;
 import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.ScreeningInformation;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,6 +38,7 @@ public class ScreeningsResource {
                                                    @QueryParam("hEnd") int endHour,
                                                    @QueryParam("mStart") int startMinute,
                                                    @QueryParam("mEnd") int endMinute) {
+        ScreeningsApplication.initDB(); // add sample data if run first time
         // Create database query
         CriteriaBuilder cb = emgr.getCriteriaBuilder();
         CriteriaQuery<ScreeningInformation> query = cb.createQuery(ScreeningInformation.class);
@@ -50,8 +53,12 @@ public class ScreeningsResource {
         Selection<Movie> movieSelection = screeningRoot.get("movie");
         Selection<LocalDateTime> dateTimeSelection = screeningRoot.get("dateAndTime");
         Selection<Integer> idSelection = screeningRoot.get("IDScreening");
-        return emgr.createQuery(query.multiselect(movieSelection, dateTimeSelection, idSelection))
+        
+        List<ScreeningInformation> result = emgr.createQuery(query.multiselect(movieSelection, dateTimeSelection, idSelection))
                 .getResultList();
+        ArrayList<ScreeningInformation> sortedResult = new ArrayList<>(result);
+        Collections.sort(sortedResult);
+        return sortedResult;
     }
 
     @GET
