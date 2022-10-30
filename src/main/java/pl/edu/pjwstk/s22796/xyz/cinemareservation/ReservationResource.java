@@ -29,8 +29,6 @@ import java.util.ArrayList;
 @Path("/reservation")
 public class ReservationResource {
 
-    // Used by ExceptionMapper to tell the user which seat has already been reserved in case of conflict
-    static ReservationRequest.Seat lastSeatResAttempt;
     private final EntityManagerFactory emgrFactory;
 
     public ReservationResource() {
@@ -111,21 +109,27 @@ public class ReservationResource {
 
         double totalPrice = 0D;
         ArrayList<ReservedSeat> seatsReservedThisSession = new ArrayList<>();
+
         // Reserve each seat, converting ReservationRequest.Seat to ReservedSeat
         // Duplicate reservations are prevented by the composite primary key constraint
         // (see entities.ReservedSeatPrimaryKey)
         for(ReservationRequest.Seat seat : req.getSeats()) {
-            ReservationResource.lastSeatResAttempt = seat;
+
             ReservedSeat seat1 = new ReservedSeat();
             seat1.setReservation(reservation);
             seat1.setScreening(scr);
             seat1.setIDScreening(scr.getID());
+            seat1.setTicketType(seat.getTicketType());
+
+            // Validate row number
             if(scr.getRoom().getNumRows() < seat.getRowNumber())
                 throw new IllegalArgumentException("Row number " + seat.getRowNumber() + " does not exist in the room");
             else if(seat.getRowNumber() <= 0)
                 throw new IllegalArgumentException(seat.getRowNumber() + " is not a valid row number");
             else
                 seat1.setRowNumber(seat.getRowNumber());
+
+            // Validate seat number
             if(seat.getSeatNumber() > 26 || seat.getSeatNumber() <= 0)
                 throw new IllegalArgumentException(seat.getSeatNumber() + " is not a valid seat number");
             else if(scr.getRoom().getSeatsPerRow() < seat.getSeatNumber())
@@ -133,7 +137,7 @@ public class ReservationResource {
                         + " does not exist in the room");
             else
                 seat1.setSeatNumber(seat.getSeatNumber());
-            seat1.setTicketType(seat.getTicketType());
+
             emgr.persist(seat1);
             seatsReservedThisSession.add(seat1);
             totalPrice += seat.getTicketType().getPrice();

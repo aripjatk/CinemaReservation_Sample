@@ -23,7 +23,7 @@ public class CinemaExceptionMapper implements ExceptionMapper<Throwable> {
             if (throwable instanceof RollbackException)
                 if(throwable.getCause() != null)
                     if(throwable.getCause().getCause() instanceof ConstraintViolationException) {
-                        throwable = new SeatReservedException(ReservationResource.lastSeatResAttempt);
+                        throwable = new SeatReservedException();
                     }
             if (throwable instanceof IllegalArgumentException ||
                     throwable instanceof DateTimeException ||
