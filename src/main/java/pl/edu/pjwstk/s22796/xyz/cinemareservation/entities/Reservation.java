@@ -2,7 +2,7 @@ package pl.edu.pjwstk.s22796.xyz.cinemareservation.entities;
 
 import jakarta.persistence.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Represents a submitted and confirmed reservation of
@@ -20,7 +20,7 @@ public class Reservation {
     @Column(nullable = false)
     private String surname;
     @Column(nullable = false)
-    private Instant expiration;
+    private LocalDateTime expiration;
 
     public int getID() {
         return idReservation;
@@ -34,11 +34,11 @@ public class Reservation {
      * Returns the time at which this reservation is set to expire.
      * @return expiration time in UTC
      */
-    public Instant getExpiration() {
+    public LocalDateTime getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(Instant expiration) {
+    public void setExpiration(LocalDateTime expiration) {
         this.expiration = expiration;
     }
 

@@ -19,8 +19,7 @@ import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.ReservationInvoice
 import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.ReservationRequest;
 import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.SeatingAvailability;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -99,12 +98,17 @@ public class ReservationResource {
         query.where(cb.equal(screeningRoot.get("IDScreening"), screeningID));
         Screening scr = emgr.createQuery(query).getSingleResult();
 
+        // Check if it is still possible to reserve for the particular screening
+        LocalDateTime deadline = scr.getDateAndTime().minusMinutes(15);
+        if(deadline.isAfter(LocalDateTime.now()))
+            throw new IllegalStateException("This screening's reservation deadline has passed");
+
         // Initialise reservation object with info from POST request
         // then save it, so it can be used as foreign key for ReservedSeats
         Reservation reservation = new Reservation();
         reservation.setName(req.getName());
         reservation.setSurname(req.getSurname());
-        reservation.setExpiration(Instant.now().plus(24, ChronoUnit.HOURS));
+        reservation.setExpiration(deadline);
         emgr.persist(reservation);
 
         double totalPrice = 0D;

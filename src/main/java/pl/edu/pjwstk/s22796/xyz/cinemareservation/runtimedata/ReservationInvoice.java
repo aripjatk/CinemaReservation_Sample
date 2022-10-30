@@ -1,6 +1,6 @@
 package pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Represents a confirmation of a reservation request made by the user.
@@ -9,9 +9,9 @@ import java.time.Instant;
 @SuppressWarnings("unused")
 public class ReservationInvoice {
     private double amountToPay;
-    private Instant expiration;
+    private LocalDateTime expiration;
 
-    public ReservationInvoice(double amountToPay, Instant expiration) {
+    public ReservationInvoice(double amountToPay, LocalDateTime expiration) {
         this.setAmountToPay(amountToPay);
         this.setExpiration(expiration);
     }
@@ -24,11 +24,11 @@ public class ReservationInvoice {
         this.amountToPay = amountToPay;
     }
 
-    public Instant getExpiration() {
+    public LocalDateTime getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(Instant expiration) {
+    public void setExpiration(LocalDateTime expiration) {
         this.expiration = expiration;
     }
 }
