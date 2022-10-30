@@ -7,6 +7,7 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -117,7 +118,13 @@ public class ReservationResource {
             seat1.setSeatNumber(seat.getSeatNumber());
             seat1.setRowNumber(seat.getRowNumber());
             seat1.setTicketType(seat.getTicketType());
-            emgr.persist(seat1);
+            try {
+                emgr.persist(seat1);
+            } catch(Throwable t) {
+                if(t instanceof ConstraintViolationException || t.getCause() instanceof ConstraintViolationException)
+                    throw new SeatReservedException(seat);
+                else throw t;
+            }
             totalPrice += seat.getTicketType().getPrice();
         }
 

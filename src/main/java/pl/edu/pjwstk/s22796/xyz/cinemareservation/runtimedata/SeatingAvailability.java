@@ -39,7 +39,7 @@ public class SeatingAvailability {
      * @param num Seat number (starts at 1)
      * @return Seat letter
      */
-    private char seat(int num) {
+    public static char seat(int num) {
         return (char)((int)'A'+num-1);
     }
 
