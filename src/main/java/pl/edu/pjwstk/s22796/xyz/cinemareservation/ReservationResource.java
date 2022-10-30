@@ -17,9 +17,11 @@ import pl.edu.pjwstk.s22796.xyz.cinemareservation.entities.ReservedSeat;
 import pl.edu.pjwstk.s22796.xyz.cinemareservation.entities.Screening;
 import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.ReservationInvoice;
 import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.ReservationRequest;
+import pl.edu.pjwstk.s22796.xyz.cinemareservation.runtimedata.SeatingAvailability;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 /**
  * Contains API methods to manage reservations.
@@ -108,6 +110,7 @@ public class ReservationResource {
         emgr.persist(reservation);
 
         double totalPrice = 0D;
+        ArrayList<ReservedSeat> seatsReservedThisSession = new ArrayList<>();
         // Reserve each seat, converting ReservationRequest.Seat to ReservedSeat
         // Duplicate reservations are prevented by the composite primary key constraint
         // (see entities.ReservedSeatPrimaryKey)
@@ -117,12 +120,37 @@ public class ReservationResource {
             seat1.setReservation(reservation);
             seat1.setScreening(scr);
             seat1.setIDScreening(scr.getID());
-            seat1.setSeatNumber(seat.getSeatNumber());
-            seat1.setRowNumber(seat.getRowNumber());
+            if(scr.getRoom().getNumRows() < seat.getRowNumber())
+                throw new IllegalArgumentException("Row number " + seat.getRowNumber() + " does not exist in the room");
+            else if(seat.getRowNumber() <= 0)
+                throw new IllegalArgumentException(seat.getRowNumber() + " is not a valid row number");
+            else
+                seat1.setRowNumber(seat.getRowNumber());
+            if(seat.getSeatNumber() > 26 || seat.getSeatNumber() <= 0)
+                throw new IllegalArgumentException(seat.getSeatNumber() + " is not a valid seat number");
+            else if(scr.getRoom().getSeatsPerRow() < seat.getSeatNumber())
+                throw new IllegalArgumentException("Seat " + seat.getRowNumber() + SeatingAvailability.seat(seat.getSeatNumber())
+                        + " does not exist in the room");
+            else
+                seat1.setSeatNumber(seat.getSeatNumber());
             seat1.setTicketType(seat.getTicketType());
             emgr.persist(seat1);
+            seatsReservedThisSession.add(seat1);
             totalPrice += seat.getTicketType().getPrice();
         }
+
+        // Check if there are any empty seats left over
+        seatsReservedThisSession.stream().mapToInt(ReservedSeat::getRowNumber)
+                        .distinct().forEach(row -> {
+                            int[] seatNumbers =
+                                    seatsReservedThisSession.stream().filter(seat -> seat.getRowNumber() == row)
+                                    .mapToInt(ReservedSeat::getSeatNumber).sorted().toArray();
+                            if(seatNumbers.length >= 2)
+                                for(int i=1;i<seatNumbers.length;i++)
+                                    if(seatNumbers[i] != (seatNumbers[i-1]+1))
+                                        throw new IllegalArgumentException("There cannot be a single place left over " +
+                                                "in a row between two already reserved places");
+                });
 
         trans.commit();
         return new ReservationInvoice(totalPrice, reservation.getExpiration());
