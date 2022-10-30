@@ -100,7 +100,7 @@ public class ReservationResource {
 
         // Check if it is still possible to reserve for the particular screening
         LocalDateTime deadline = scr.getDateAndTime().minusMinutes(15);
-        if(deadline.isAfter(LocalDateTime.now()))
+        if(LocalDateTime.now().isAfter(deadline))
             throw new IllegalStateException("This screening's reservation deadline has passed");
 
         // Initialise reservation object with info from POST request
