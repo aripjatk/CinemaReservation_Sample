@@ -33,11 +33,45 @@ public class ReservationResource {
         emgrFactory = Persistence.createEntityManagerFactory("default");
     }
 
+    public static boolean validateName(String name, boolean lastName) {
+        if(name.length() < 3)
+            return false;
+        // !(isUpperCase()) is used instead of (isLowerCase) because the latter
+        // would also return false if the character is not a letter at all
+        if(!(Character.isUpperCase(name.charAt(0))))
+            return false;
+        for(int i=1;i<name.length();i++) {
+            char ch = name.charAt(i);
+            if(Character.isLetter(ch)) {
+                if(Character.isUpperCase(ch))
+                    return false;
+            } else {
+                if(ch == '-') {
+                    if(!lastName)
+                        return false;
+                    else {
+                        lastName = false; // lastName can only have one hyphen
+                        if(!(Character.isUpperCase(name.charAt(++i))))
+                            return false;
+                    }
+                } else
+                    return false;
+            }
+        }
+        return true;
+    }
+
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ReservationInvoice makeReservation(ReservationRequest req) {
+
+        if(req.getSeats().isEmpty())
+            throw new IllegalArgumentException("Reservation must be for at least one seat");
+
+        if(!(validateName(req.getName(), false) && validateName(req.getSurname(), true)))
+            throw new IllegalArgumentException("Invalid name or surname");
 
         // Start transaction to avoid partial reservations e.g. in case one seat is taken
         EntityManager emgr = emgrFactory.createEntityManager();
