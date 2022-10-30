@@ -12,6 +12,6 @@ public class SeatReservedException extends RuntimeException {
     @Override
     public String getMessage() {
         return "Seat " + seat.getRowNumber() + SeatingAvailability.seat(seat.getSeatNumber()) +
-                "has already been reserved";
+                " has already been reserved";
     }
 }

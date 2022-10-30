@@ -7,7 +7,6 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -28,6 +27,8 @@ import java.time.temporal.ChronoUnit;
 @Path("/reservation")
 public class ReservationResource {
 
+    // Used by ExceptionMapper to tell the user which seat has already been reserved in case of conflict
+    static ReservationRequest.Seat lastSeatResAttempt;
     private final EntityManagerFactory emgrFactory;
 
     public ReservationResource() {
@@ -111,6 +112,7 @@ public class ReservationResource {
         // Duplicate reservations are prevented by the composite primary key constraint
         // (see entities.ReservedSeatPrimaryKey)
         for(ReservationRequest.Seat seat : req.getSeats()) {
+            ReservationResource.lastSeatResAttempt = seat;
             ReservedSeat seat1 = new ReservedSeat();
             seat1.setReservation(reservation);
             seat1.setScreening(scr);
@@ -118,13 +120,7 @@ public class ReservationResource {
             seat1.setSeatNumber(seat.getSeatNumber());
             seat1.setRowNumber(seat.getRowNumber());
             seat1.setTicketType(seat.getTicketType());
-            try {
-                emgr.persist(seat1);
-            } catch(Throwable t) {
-                if(t instanceof ConstraintViolationException || t.getCause() instanceof ConstraintViolationException)
-                    throw new SeatReservedException(seat);
-                else throw t;
-            }
+            emgr.persist(seat1);
             totalPrice += seat.getTicketType().getPrice();
         }
 
