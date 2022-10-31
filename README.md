@@ -125,7 +125,7 @@ POST /<WAR>/cinema/reservation/create
 }
 ```
 
-Meaning: Reserve seat 3D and 3E in screening ID 1 for two students under the name "Test Testowski".
+Meaning: Reserve seat 3D and 3E in screening ID 4 for two students under the name "Test Testowski".
 
 Example response:
 
