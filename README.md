@@ -37,7 +37,7 @@ cat init_sql.sql | sudo mysql
 
 ## API methods
 
-`<WAR>` = name of the WAR file in the application server's target directory. When using the provided `compileAndRun.sh` script, this will be `CinemaReservation`
+`<WAR>` = name of the WAR file in the target directory of the Jakarta EE application server (e.g. Tomcat). When using the provided `compileAndRun.sh` script, this will be `CinemaReservation`
 
 ### List screenings
 
@@ -72,7 +72,7 @@ Meaning: There's a screening of Avatar 2 at 8:50:51 AM. The screening ID (see be
 GET /<WAR>/cinema/screenings/details/<id>
 ```
 
-Returns detailed information about a screening specified by `<id>`. This `id` is returned by the `/cinema/screenings/list` method.
+Returns detailed information about a screening specified by `<id>`. This `id` is returned by the `/cinema/screenings/list` endpoint.
 
 Example request:
 
