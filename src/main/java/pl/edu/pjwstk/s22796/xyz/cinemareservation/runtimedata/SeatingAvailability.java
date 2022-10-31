@@ -67,7 +67,7 @@ public class SeatingAvailability {
                         builder.append(seat(j));
                     else // ... but more than one before it was
                         builder.append(seat(firstFreeSeat+1))
-                                .append('-').append(seat(j+2));
+                                .append('-').append(seat(j));
                     builder.append(",").append(i+1);
                     consecutiveFreeSeats = 0;
                 }
